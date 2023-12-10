@@ -17,8 +17,23 @@ public class Livre {
     private Date dateDePublication;
     private int ISBN ;
 
+    private FormatLivre formatLivre ;
+    private PublicCible publicCible ;
+    private GenreLivre genreLivre ;
+
     public Livre(){
 
+    }
+
+    public Livre(long idLivre, String titre, String auteur, Date dateDePublication, int ISBN, FormatLivre formatLivre, PublicCible publicCible, GenreLivre genreLivre) {
+        this.idLivre = idLivre;
+        this.titre = titre;
+        this.auteur = auteur;
+        this.dateDePublication = dateDePublication;
+        this.ISBN = ISBN;
+        this.formatLivre = formatLivre;
+        this.publicCible = publicCible;
+        this.genreLivre = genreLivre;
     }
 
     public Livre(long idLivre, String titre, String auteur, Date dateDePublication, int ISBN) {
@@ -67,6 +82,30 @@ public class Livre {
 
     public void setISBN(int ISBN) {
         this.ISBN = ISBN;
+    }
+
+    public FormatLivre getFormatLivre() {
+        return formatLivre;
+    }
+
+    public void setFormatLivre(FormatLivre formatLivre) {
+        this.formatLivre = formatLivre;
+    }
+
+    public PublicCible getPublicCible() {
+        return publicCible;
+    }
+
+    public void setPublicCible(PublicCible publicCible) {
+        this.publicCible = publicCible;
+    }
+
+    public GenreLivre getGenreLivre() {
+        return genreLivre;
+    }
+
+    public void setGenreLivre(GenreLivre genreLivre) {
+        this.genreLivre = genreLivre;
     }
 }
 
