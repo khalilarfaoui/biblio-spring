@@ -1,6 +1,9 @@
 package com.biblio.bnr.controllers;
 
+import com.biblio.bnr.entity.FormatLivre;
+import com.biblio.bnr.entity.GenreLivre;
 import com.biblio.bnr.entity.Livre;
+import com.biblio.bnr.entity.PublicCible;
 import com.biblio.bnr.services.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+
 @RestController
-@RequestMapping("/livres")
+@RequestMapping("/public/livres")
 public class LivreController {
     @Autowired
     private LivreService livreService;
@@ -53,5 +56,23 @@ public class LivreController {
         }
         livreService.deleteLivre(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/retrieve-all-formatLivre")
+    @ResponseBody
+    public FormatLivre[] getFormatLivre() {
+        return FormatLivre.values();
+    }
+
+    @GetMapping("/retrieve-all-genreLivre")
+    @ResponseBody
+    public GenreLivre[] getGenreLivre() {
+        return GenreLivre.values();
+    }
+
+    @GetMapping("/retrieve-all-publicCible")
+    @ResponseBody
+    public PublicCible[] getPublicCible() {
+        return PublicCible.values();
     }
 }
