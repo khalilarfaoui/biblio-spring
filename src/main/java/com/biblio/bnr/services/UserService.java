@@ -24,6 +24,11 @@ public class UserService implements IUserService{
     }
 
     @Override
+    public User retrieveUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
     public User addUser(User user) {
         return userRepository.save(user);
     }

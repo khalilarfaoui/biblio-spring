@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface IUserService {
     List<User> retrieveUsers();
     User updateUser (User user);
+    User retrieveUserByUsername (String username);
     User addUser(User user);
     Optional<User> retrieveUserById (long idUser);
 

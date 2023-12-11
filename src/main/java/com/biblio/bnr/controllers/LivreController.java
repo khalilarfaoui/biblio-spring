@@ -6,6 +6,8 @@ import com.biblio.bnr.entity.Livre;
 import com.biblio.bnr.entity.PublicCible;
 import com.biblio.bnr.services.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/livres")
 public class LivreController {
@@ -22,8 +25,8 @@ public class LivreController {
     private LivreService livreService;
 
     @GetMapping
-    public List<Livre> getAllLivres() {
-        return livreService.retrieveLivres();
+    public Page<Livre> getAllLivres(Pageable pageable) {
+        return livreService.retrieveLivres(pageable);
     }
 
     @GetMapping("/{id}")

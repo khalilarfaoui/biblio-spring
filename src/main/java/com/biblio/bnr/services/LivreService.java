@@ -3,6 +3,8 @@ package com.biblio.bnr.services;
 import com.biblio.bnr.entity.Livre;
 import com.biblio.bnr.repositories.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +16,8 @@ public class LivreService implements ILivreService {
     @Autowired
     private LivreRepository livreRepository;
     @Override
-    public List<Livre> retrieveLivres() {
-        return livreRepository.findAll();
+    public Page<Livre> retrieveLivres(Pageable pageable) {
+        return livreRepository.findAll(pageable);
     }
 
     @Override

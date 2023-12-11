@@ -16,7 +16,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        roleRepository.save(new Role("USER"));
-        roleRepository.save(new Role("ADMIN"));
+     /*   roleRepository.save(new Role("USER"));
+        roleRepository.save(new Role("ADMIN"));*/
     }
 }
