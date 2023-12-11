@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/public/livres")
+@RequestMapping("/livres")
 public class LivreController {
     @Autowired
     private LivreService livreService;

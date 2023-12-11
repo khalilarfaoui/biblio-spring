@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/public/auth")
+@RequestMapping("/auth")
 public class Authentification {
 
     @Autowired
