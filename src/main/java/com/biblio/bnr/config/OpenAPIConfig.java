@@ -15,10 +15,10 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class OpenAPIConfig {
 
-    @Value("http://localhost:8080")
+    @Value("http://localhost:8081")
     private String devUrl;
 
-    @Value("http://localhost:8080")
+    @Value("http://localhost:8081")
     private String prodUrl;
 
     @Bean
@@ -32,17 +32,17 @@ public class OpenAPIConfig {
         prodServer.setDescription("Server URL in Production environment");
 
         Contact contact = new Contact();
-        contact.setEmail("bezkoder@gmail.com");
-        contact.setName("BezKoder");
-        contact.setUrl("https://www.bezkoder.com");
+        contact.setEmail("khalilwin1920@gmail.com");
+        contact.setName("khalilarfaoui");
+        contact.setUrl("https://www.google.com");
 
         License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
 
         Info info = new Info()
-                .title("Tutorial Management API")
+                .title("Biblio API")
                 .version("1.0")
                 .contact(contact)
-                .description("This API exposes endpoints to manage tutorials.").termsOfService("https://www.bezkoder.com/terms")
+                .description("This API exposes endpoints to manage biblio.").termsOfService("https://www.google.com/")
                 .license(mitLicense);
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer));

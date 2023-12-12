@@ -6,6 +6,8 @@ import com.biblio.bnr.entity.Livre;
 import com.biblio.bnr.entity.PublicCible;
 import com.biblio.bnr.services.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,15 +17,17 @@ import java.util.List;
 import java.util.Optional;
 
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/public/livres")
+@RequestMapping("/livres")
 public class LivreController {
     @Autowired
     private LivreService livreService;
 
+    // http://localhost:8081/livres?page=0&size=3
     @GetMapping
-    public List<Livre> getAllLivres() {
-        return livreService.retrieveLivres();
+    public Page<Livre> getAllLivres(Pageable pageable) {
+        return livreService.retrieveLivres(pageable);
     }
 
     @GetMapping("/{id}")
@@ -74,5 +78,22 @@ public class LivreController {
     @ResponseBody
     public PublicCible[] getPublicCible() {
         return PublicCible.values();
+    }
+
+    // http://localhost:8081/livres/byParams?formatLivre=POCHE&publicCible=ENFANTS&genreLivre=ROMANS
+
+    @GetMapping("/byParams")
+    public ResponseEntity<List<Livre>> getLivresByParams(
+            @RequestParam(name = "formatLivre", required = false) FormatLivre formatLivre,
+            @RequestParam(name = "publicCible", required = false) PublicCible publicCible,
+            @RequestParam(name = "genreLivre", required = false) GenreLivre genreLivre) {
+
+        List<Livre> livres = livreService.getLivresByParams(formatLivre, publicCible, genreLivre);
+
+        if (livres.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(livres, HttpStatus.OK);
     }
 }
