@@ -1,6 +1,9 @@
 package com.biblio.bnr.services;
 
+import com.biblio.bnr.entity.FormatLivre;
+import com.biblio.bnr.entity.GenreLivre;
 import com.biblio.bnr.entity.Livre;
+import com.biblio.bnr.entity.PublicCible;
 import com.biblio.bnr.repositories.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,8 @@ public class LivreService implements ILivreService {
 
     @Autowired
     private LivreRepository livreRepository;
+
+    // http://localhost:8081/livres?page=0&size=3
     @Override
     public Page<Livre> retrieveLivres(Pageable pageable) {
         return livreRepository.findAll(pageable);
@@ -38,5 +43,27 @@ public class LivreService implements ILivreService {
     @Override
     public void deleteLivre(long id) {
         livreRepository.deleteById(id);
+    }
+
+    // http://localhost:8081/livres/byParams?formatLivre=POCHE&publicCible=ENFANTS&genreLivre=ROMANS
+    @Override
+    public List<Livre> getLivresByParams(FormatLivre formatLivre, PublicCible publicCible, GenreLivre genreLivre) {
+        if (formatLivre != null && publicCible != null && genreLivre != null) {
+            return livreRepository.findByFormatLivreAndPublicCibleAndGenreLivre(formatLivre, publicCible, genreLivre);
+        } else if (formatLivre != null && publicCible != null) {
+            return livreRepository.findByFormatLivreAndPublicCible(formatLivre, publicCible);
+        } else if (formatLivre != null && genreLivre != null) {
+            return livreRepository.findByFormatLivreAndGenreLivre(formatLivre, genreLivre);
+        } else if (publicCible != null && genreLivre != null) {
+            return livreRepository.findByPublicCibleAndGenreLivre(publicCible, genreLivre);
+        } else if (formatLivre != null) {
+            return livreRepository.findByFormatLivre(formatLivre);
+        } else if (publicCible != null) {
+            return livreRepository.findByPublicCible(publicCible);
+        } else if (genreLivre != null) {
+            return livreRepository.findByGenreLivre(genreLivre);
+        } else {
+            return livreRepository.findAll();
+        }
     }
 }

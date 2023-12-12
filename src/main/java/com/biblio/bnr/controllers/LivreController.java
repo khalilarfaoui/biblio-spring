@@ -24,6 +24,7 @@ public class LivreController {
     @Autowired
     private LivreService livreService;
 
+    // http://localhost:8081/livres?page=0&size=3
     @GetMapping
     public Page<Livre> getAllLivres(Pageable pageable) {
         return livreService.retrieveLivres(pageable);
@@ -77,5 +78,22 @@ public class LivreController {
     @ResponseBody
     public PublicCible[] getPublicCible() {
         return PublicCible.values();
+    }
+
+    // http://localhost:8081/livres/byParams?formatLivre=POCHE&publicCible=ENFANTS&genreLivre=ROMANS
+
+    @GetMapping("/byParams")
+    public ResponseEntity<List<Livre>> getLivresByParams(
+            @RequestParam(name = "formatLivre", required = false) FormatLivre formatLivre,
+            @RequestParam(name = "publicCible", required = false) PublicCible publicCible,
+            @RequestParam(name = "genreLivre", required = false) GenreLivre genreLivre) {
+
+        List<Livre> livres = livreService.getLivresByParams(formatLivre, publicCible, genreLivre);
+
+        if (livres.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(livres, HttpStatus.OK);
     }
 }
