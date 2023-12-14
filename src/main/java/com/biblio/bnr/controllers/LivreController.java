@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/livres")
+@RequestMapping("/api/livres")
 public class LivreController {
     @Autowired
     private LivreService livreService;

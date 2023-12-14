@@ -1,51 +1,36 @@
 package com.biblio.bnr.config;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.util.StringUtils;
 
 @Configuration
 public class OpenAPIConfig {
 
-    @Value("http://localhost:8081")
-    private String devUrl;
-
-    @Value("http://localhost:8081")
-    private String prodUrl;
-
     @Bean
-    public OpenAPI myOpenAPI() {
-        Server devServer = new Server();
-        devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development environment");
+    public OpenAPI customOpenAPI() {
+        final String securitySchemeName = "X-Auth-Token";
+        final String apiTitle = String.format("%s API", StringUtils.capitalize("Spring boot Biblio"));
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(
+                        new Components()
+                                .addSecuritySchemes(securitySchemeName,
+                                        new SecurityScheme()
+                                                .name(securitySchemeName)
+                                                .type(SecurityScheme.Type.APIKEY)
+                                                .in(SecurityScheme.In.HEADER)
 
-        Server prodServer = new Server();
-        prodServer.setUrl(prodUrl);
-        prodServer.setDescription("Server URL in Production environment");
-
-        Contact contact = new Contact();
-        contact.setEmail("khalilwin1920@gmail.com");
-        contact.setName("khalilarfaoui");
-        contact.setUrl("https://www.google.com");
-
-        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
-
-        Info info = new Info()
-                .title("Biblio API")
-                .version("1.0")
-                .contact(contact)
-                .description("This API exposes endpoints to manage biblio.").termsOfService("https://www.google.com/")
-                .license(mitLicense);
-
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+                                )
+                )
+                .info(new Info().title(apiTitle).version("V1"));
     }
 }
+
 
