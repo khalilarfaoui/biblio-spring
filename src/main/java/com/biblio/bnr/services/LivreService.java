@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,8 +23,8 @@ public class LivreService implements ILivreService {
 
     // http://localhost:8081/livres?page=0&size=3
     @Override
-    public Page<Livre> retrieveLivres(Pageable pageable) {
-        return livreRepository.findAll(pageable);
+    public List<Livre> retrieveLivres() {
+        return livreRepository.findAll();
     }
 
     @Override
@@ -30,6 +32,31 @@ public class LivreService implements ILivreService {
         return null;
     }
 
+    public Map<FormatLivre, Long> countBooksByFormatLivre() {
+        List<Object[]> result = livreRepository.countBooksByFormatLivre();
+
+        Map<FormatLivre, Long> countMap = new HashMap<>();
+        for (Object[] row : result) {
+            FormatLivre formatLivre = (FormatLivre) row[0];
+            Long count = (Long) row[1];
+            countMap.put(formatLivre, count);
+        }
+
+        return countMap;
+    }
+
+    public Map<GenreLivre, Long> countBooksByGenreLivre() {
+        List<Object[]> result = livreRepository.countBooksByGenreLivre();
+
+        Map<GenreLivre, Long> countMap = new HashMap<>();
+        for (Object[] row : result) {
+            GenreLivre genreLivre = (GenreLivre) row[0];
+            Long count = (Long) row[1];
+            countMap.put(genreLivre, count);
+        }
+
+        return countMap;
+    }
     @Override
     public Livre addLivre(Livre livre) {
         return livreRepository.save(livre);
