@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ILivreService {
-    Page<Livre> retrieveLivres(Pageable pageable);
+    List<Livre> retrieveLivres();
     Livre updateLivre (Livre livre);
     Livre addLivre (Livre livre);
     Optional<Livre> retrieveLivreById (long idLivre);

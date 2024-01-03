@@ -4,6 +4,7 @@ import com.biblio.bnr.entity.FormatLivre;
 import com.biblio.bnr.entity.GenreLivre;
 import com.biblio.bnr.entity.Livre;
 import com.biblio.bnr.entity.PublicCible;
+import com.biblio.bnr.repositories.LivreRepository;
 import com.biblio.bnr.services.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,20 +15,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/livres")
+@RequestMapping("/livres")
 public class LivreController {
     @Autowired
     private LivreService livreService;
-
+    @Autowired
+    private LivreRepository livreRepository;
     // http://localhost:8081/livres?page=0&size=3
     @GetMapping
-    public Page<Livre> getAllLivres(Pageable pageable) {
-        return livreService.retrieveLivres(pageable);
+    public List<Livre> getAllLivres() {
+        return livreService.retrieveLivres();
     }
 
     @GetMapping("/{id}")
@@ -43,6 +46,26 @@ public class LivreController {
         return new ResponseEntity<>(savedLivre, HttpStatus.CREATED);
     }
 
+    @GetMapping("/avec-emprunt")
+    public List<Livre> getLivresAvecEmprunt() {
+        return livreRepository.findByEmpruntIsNotNull();
+    }
+
+    @GetMapping("/sans-emprunt")
+    public List<Livre> getLivresSansEmprunt() {
+        return livreRepository.findByEmpruntIsNull();
+    }
+
+    @GetMapping("/sans-emprunt-et-reservation")
+    public List<Livre> getLivresSansEmpruntEtReservation() {
+        return livreRepository.findByEmpruntIsNullAndReservationIsNull();
+    }
+
+    @GetMapping("/avec-emprunt-sans-reservation")
+    public List<Livre> getLivresAvecEmpruntSansReservation() {
+        return livreRepository.findByEmpruntIsNotNullAndReservationIsNull();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Livre> updateLivre(@PathVariable long id, @RequestBody Livre livre) {
         if (!livreService.retrieveLivreById(id).isPresent()) {
@@ -51,6 +74,18 @@ public class LivreController {
         livre.setIdLivre(id);
         Livre updatedLivre = livreService.addLivre(livre);
         return new ResponseEntity<>(updatedLivre, HttpStatus.OK);
+    }
+
+    @GetMapping("/countByFormat")
+    public ResponseEntity<Map<FormatLivre, Long>> countBooksByFormatLivre() {
+        Map<FormatLivre, Long> countMap = livreService.countBooksByFormatLivre();
+        return new ResponseEntity<>(countMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/countByGenre")
+    public ResponseEntity<Map<GenreLivre, Long>> countBooksByGenreLivre() {
+        Map<GenreLivre, Long> countMap = livreService.countBooksByGenreLivre();
+        return new ResponseEntity<>(countMap, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
